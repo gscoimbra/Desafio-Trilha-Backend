@@ -35,7 +35,8 @@ build/
 *.iws
 *.iml
 *.ipr
-out/
+# Only project root "out" (build output), not packages like adapter/out/
+/out/
 
 # IDE - Eclipse
 .apt_generated
