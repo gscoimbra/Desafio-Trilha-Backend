@@ -1,6 +1,7 @@
 package com.streaming.subscriptions.adapter.in.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.streaming.subscriptions.domain.exception.InvalidNotificationTypeException;
 import com.streaming.subscriptions.domain.model.Notification;
 import com.streaming.subscriptions.domain.model.NotificationType;
 import jakarta.validation.constraints.NotBlank;
@@ -35,8 +36,7 @@ public class NotificationRequestDto {
         try {
             notificationType = NotificationType.valueOf(type.trim());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(
-                    "Invalid notification type: " + type + ". Expected one of: SUBSCRIPTION_PURCHASED, SUBSCRIPTION_CANCELED, SUBSCRIPTION_RESTARTED.");
+            throw new InvalidNotificationTypeException(type);
         }
         Instant at = occurredAt != null ? occurredAt : Instant.now();
         return new Notification(subscriptionId, notificationType, at);

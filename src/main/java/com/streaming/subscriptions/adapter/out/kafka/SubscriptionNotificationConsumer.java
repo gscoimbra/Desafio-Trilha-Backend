@@ -2,6 +2,7 @@ package com.streaming.subscriptions.adapter.out.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.streaming.subscriptions.application.port.in.ProcessNotificationUseCase;
+import com.streaming.subscriptions.domain.exception.DomainException;
 import com.streaming.subscriptions.domain.exception.SubscriptionNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,11 @@ public class SubscriptionNotificationConsumer {
             processNotificationUseCase.execute(parsed.toDomain());
         } catch (SubscriptionNotFoundException e) {
             log.warn("Skipping message: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (DomainException e) {
+            if (e.isServerError()) {
+                log.error("Server-side error while processing Kafka message: {}", e.getMessage(), e);
+                throw new RuntimeException("Kafka message processing failed", e);
+            }
             log.warn("Invalid notification message: {}", e.getMessage());
         } catch (Exception e) {
             log.error("Failed to process subscription notification from Kafka", e);

@@ -4,6 +4,7 @@ import com.streaming.subscriptions.application.port.in.ProcessNotificationUseCas
 import com.streaming.subscriptions.application.port.out.EventHistoryRepositoryPort;
 import com.streaming.subscriptions.application.port.out.StatusRepositoryPort;
 import com.streaming.subscriptions.application.port.out.SubscriptionRepositoryPort;
+import com.streaming.subscriptions.domain.exception.StatusNotConfiguredException;
 import com.streaming.subscriptions.domain.exception.SubscriptionNotFoundException;
 import com.streaming.subscriptions.domain.model.Notification;
 import com.streaming.subscriptions.domain.model.NotificationType;
@@ -31,7 +32,7 @@ public class ProcessNotificationService implements ProcessNotificationUseCase {
 
         String targetStatusName = resolveTargetStatusName(notification.getType());
         Long statusId = statusRepository.findIdByStatusName(targetStatusName)
-                .orElseThrow(() -> new IllegalStateException("Status not configured in database: " + targetStatusName));
+                .orElseThrow(() -> new StatusNotConfiguredException(targetStatusName));
 
         Subscription updated = subscription.withStatus(statusId, Instant.now());
         subscriptionRepository.save(updated);
