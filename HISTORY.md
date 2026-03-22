@@ -70,6 +70,10 @@ Changelog e evolução do Desafio Trilha Backend.
 - `HISTORY.md`: changelog por fase
 - `README.md`: documentação ampliada do projeto
 
+### fix: remoção de SUBSCRIPTION_RESTARTED
+- Simplificado para dois estados: ativa (PURCHASED) e cancelada (CANCELED)
+- Removido SUBSCRIPTION_RESTARTED do enum e mapeamento
+
 ### Endpoints de consulta (após Fase 14)
 - `GET /api/subscriptions` – lista assinaturas (opcional `?userId=` para filtrar)
 - `GET /api/subscriptions/{id}` – detalhes de uma assinatura (userName, statusName)

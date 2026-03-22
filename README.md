@@ -17,7 +17,7 @@ make up
 make run
 # ou: .\mvnw.cmd spring-boot:run   (Windows)
 
-# 3. Enviar notificações de teste (fluxo: PURCHASED -> CANCELED -> RESTARTED)
+# 3. Enviar notificações de teste (fluxo: PURCHASED -> CANCELED -> PURCHASED)
 make sendNotifications
 # ou: python scripts/send_notifications.py
 # ou (Windows): powershell -ExecutionPolicy Bypass -File scripts/send_notifications.ps1
@@ -78,15 +78,15 @@ Recebe notificações e enfileira para processamento assíncrono.
 ```json
 {
   "subscriptionId": 1,
-  "type": "SUBSCRIPTION_PURCHASED",
-  "occurredAt": "2025-02-16T12:00:00Z"
+  "type": "SUBSCRIPTION_PURCHASED"
 }
 ```
+O timestamp do evento é definido pelo servidor ao receber a requisição.
 
-**Tipos:** `SUBSCRIPTION_PURCHASED`, `SUBSCRIPTION_CANCELED`, `SUBSCRIPTION_RESTARTED`
+**Tipos:** `SUBSCRIPTION_PURCHASED`, `SUBSCRIPTION_CANCELED`
 
 **Mapeamento:**
-- PURCHASED / RESTARTED → status `ativa`
+- PURCHASED → status `ativa`
 - CANCELED → status `cancelada`
 
 **Respostas:**

@@ -109,16 +109,4 @@ class ProcessNotificationServiceTest {
         verify(eventHistoryRepository).append(notification);
     }
 
-    @Test
-    void execute_whenSubscriptionRestarted_shouldSetStatusAtiva() {
-        notification = new Notification(SUBSCRIPTION_ID, NotificationType.SUBSCRIPTION_RESTARTED, Instant.now());
-        when(subscriptionRepository.findById(SUBSCRIPTION_ID)).thenReturn(Optional.of(subscription));
-        when(statusRepository.findIdByStatusName("ativa")).thenReturn(Optional.of(STATUS_ATIVA_ID));
-
-        processNotificationService.execute(notification);
-
-        ArgumentCaptor<Subscription> savedSubscription = ArgumentCaptor.forClass(Subscription.class);
-        verify(subscriptionRepository).save(savedSubscription.capture());
-        assertThat(savedSubscription.getValue().getStatusId()).isEqualTo(STATUS_ATIVA_ID);
-    }
 }

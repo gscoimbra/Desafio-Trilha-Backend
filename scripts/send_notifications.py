@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Sends subscription lifecycle notifications to the API.
-Follows the flow: PURCHASED -> CANCELED -> RESTARTED.
+Flow: PURCHASED (ativa) -> CANCELED (cancelada) -> PURCHASED (reativa).
 Uses only stdlib (urllib, json) - no extra dependencies.
 """
 import json
@@ -14,7 +14,7 @@ SUBSCRIPTION_ID = 1
 NOTIFICATION_TYPES = [
     "SUBSCRIPTION_PURCHASED",
     "SUBSCRIPTION_CANCELED",
-    "SUBSCRIPTION_RESTARTED",
+    "SUBSCRIPTION_PURCHASED",
 ]
 
 

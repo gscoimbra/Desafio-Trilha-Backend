@@ -1,10 +1,10 @@
 # Sends subscription lifecycle notifications to the API.
-# Flow: PURCHASED -> CANCELED -> RESTARTED
+# Flow: PURCHASED -> CANCELED -> PURCHASED (reativa)
 # Usage: .\scripts\send_notifications.ps1
 
 $baseUrl = "http://localhost:8080/api/subscriptions/notifications"
 $subscriptionId = 1
-$types = @("SUBSCRIPTION_PURCHASED", "SUBSCRIPTION_CANCELED", "SUBSCRIPTION_RESTARTED")
+$types = @("SUBSCRIPTION_PURCHASED", "SUBSCRIPTION_CANCELED", "SUBSCRIPTION_PURCHASED")
 
 Write-Host "Sending subscription lifecycle notifications..."
 

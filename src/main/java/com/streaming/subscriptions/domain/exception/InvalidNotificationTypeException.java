@@ -7,7 +7,7 @@ public class InvalidNotificationTypeException extends DomainException {
     }
 
     private static String buildMessage(String rawType) {
-        return "Invalid notification type: '%s'. Expected one of: SUBSCRIPTION_PURCHASED, SUBSCRIPTION_CANCELED, SUBSCRIPTION_RESTARTED."
+        return "Invalid notification type: '%s'. Expected one of: SUBSCRIPTION_PURCHASED, SUBSCRIPTION_CANCELED."
                 .formatted(rawType != null ? rawType : "null");
     }
 }

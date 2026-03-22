@@ -34,7 +34,6 @@ Tudo é assíncrono após o retorno 202 Accepted.
 | NotificationType        | Status alvo  |
 |-------------------------|--------------|
 | SUBSCRIPTION_PURCHASED  | ativa        |
-| SUBSCRIPTION_RESTARTED  | ativa        |
 | SUBSCRIPTION_CANCELED   | cancelada    |
 
 ---

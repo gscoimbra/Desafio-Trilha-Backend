@@ -75,7 +75,7 @@ class ProcessNotificationIntegrationTest {
         long countBefore = eventHistoryJpaRepository.count();
 
         processNotificationUseCase.execute(
-                new Notification(SUBSCRIPTION_ID, NotificationType.SUBSCRIPTION_RESTARTED, Instant.now())
+                new Notification(SUBSCRIPTION_ID, NotificationType.SUBSCRIPTION_PURCHASED, Instant.now())
         );
 
         long countAfter = eventHistoryJpaRepository.count();

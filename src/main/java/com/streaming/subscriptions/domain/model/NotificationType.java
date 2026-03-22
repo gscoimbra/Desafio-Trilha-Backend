@@ -6,8 +6,7 @@ package com.streaming.subscriptions.domain.model;
 public enum NotificationType {
 
     SUBSCRIPTION_PURCHASED,
-    SUBSCRIPTION_CANCELED,
-    SUBSCRIPTION_RESTARTED;
+    SUBSCRIPTION_CANCELED;
 
     public static boolean isValid(String value) {
         if (value == null || value.isBlank()) {

@@ -1,6 +1,5 @@
 package com.streaming.subscriptions.adapter.in.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.streaming.subscriptions.domain.exception.InvalidNotificationTypeException;
 import com.streaming.subscriptions.domain.model.Notification;
 import com.streaming.subscriptions.domain.model.NotificationType;
@@ -27,16 +26,12 @@ public class NotificationRequestDto {
 
     @NotBlank(message = "type is required")
     @Schema(
-            description = "Notification type. Determines the subscription status: SUBSCRIPTION_PURCHASED/RESTARTED → ativa, SUBSCRIPTION_CANCELED → cancelada",
+            description = "Notification type. SUBSCRIPTION_PURCHASED → ativa, SUBSCRIPTION_CANCELED → cancelada",
             example = "SUBSCRIPTION_PURCHASED",
             requiredMode = Schema.RequiredMode.REQUIRED,
-            allowableValues = {"SUBSCRIPTION_PURCHASED", "SUBSCRIPTION_CANCELED", "SUBSCRIPTION_RESTARTED"}
+            allowableValues = {"SUBSCRIPTION_PURCHASED", "SUBSCRIPTION_CANCELED"}
     )
     private String type;
-
-    @JsonAlias("timestamp")
-    @Schema(description = "When the event occurred (ISO-8601). Defaults to now if omitted.")
-    private Instant occurredAt;
 
     public Notification toDomain() {
         NotificationType notificationType;
@@ -45,7 +40,6 @@ public class NotificationRequestDto {
         } catch (IllegalArgumentException e) {
             throw new InvalidNotificationTypeException(type);
         }
-        Instant at = occurredAt != null ? occurredAt : Instant.now();
-        return new Notification(subscriptionId, notificationType, at);
+        return new Notification(subscriptionId, notificationType, Instant.now());
     }
 }
