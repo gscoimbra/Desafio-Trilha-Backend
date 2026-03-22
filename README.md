@@ -38,7 +38,7 @@ O projeto usa **Ports and Adapters** (Hexagonal):
 |-----------|------------------------------------------------------------------|
 | Domain    | `Subscription`, `Notification`, exceções, enums                  |
 | Application | Use cases e serviços (`ProcessNotificationService`, etc.)      |
-| Adapters In | REST (`NotificationController`, `SubscriptionController`, `UserController`), Kafka Consumer |
+| Adapters In | REST (`NotificationController`, `UserController`), Kafka Consumer |
 | Adapters Out | PostgreSQL (JPA), Kafka Producer                               |
 
 Fluxo: **REST → Kafka → Consumer → Processamento → DB**
@@ -71,26 +71,25 @@ Cria um usuário com assinatura inicial em status cancelada.
 
 ---
 
-### `GET /api/subscriptions` e `GET /api/subscriptions/{id}`
+### `GET /api/users` e `GET /api/users/{id}`
 
-Consultar assinaturas.
+Consultar usuários com status da assinatura.
 
-- **`GET /api/subscriptions`** – lista todas ou filtra por `?userId=1`
-- **`GET /api/subscriptions/{id}`** – retorna detalhes (id, userId, userName, statusName, createdAt, updatedAt)
+- **`GET /api/users`** – lista todos os usuários
+- **`GET /api/users/{id}`** – retorna detalhes (id, fullName, createdAt, subscriptionId, subscriptionStatus)
 
 **Exemplo de resposta (200):**
 ```json
 {
   "id": 1,
-  "userId": 1,
-  "userName": "Demo User",
-  "statusName": "ativa",
+  "fullName": "Demo User",
   "createdAt": "2025-01-01T12:00:00Z",
-  "updatedAt": "2025-02-16T12:00:00Z"
+  "subscriptionId": 1,
+  "subscriptionStatus": "ativa"
 }
 ```
 
-- **404 Not Found** – assinatura inexistente
+- **404 Not Found** – usuário inexistente
 
 ---
 
@@ -128,7 +127,7 @@ O timestamp do evento é definido pelo servidor ao receber a requisição.
 ```
 
 - **Unitários:** `ProcessNotificationServiceTest`, `ReceiveNotificationServiceTest`
-- **Controller:** `NotificationControllerTest`, `SubscriptionControllerTest`, `UserControllerTest` (MockMvc)
+- **Controller:** `NotificationControllerTest`, `UserControllerTest` (MockMvc)
 - **Integração:** `ProcessNotificationIntegrationTest`, `CreateUserIntegrationTest` (H2, fluxo completo)
 
 ---

@@ -2,7 +2,7 @@ package com.streaming.subscriptions;
 
 import com.streaming.subscriptions.adapter.out.persistence.repository.EventHistoryJpaRepository;
 import com.streaming.subscriptions.adapter.out.persistence.repository.StatusJpaRepository;
-import com.streaming.subscriptions.application.port.in.GetSubscriptionUseCase;
+import com.streaming.subscriptions.application.port.in.GetUserUseCase;
 import com.streaming.subscriptions.application.port.in.ProcessNotificationUseCase;
 import com.streaming.subscriptions.application.port.out.SubscriptionRepositoryPort;
 import com.streaming.subscriptions.domain.model.Notification;
@@ -25,7 +25,7 @@ class ProcessNotificationIntegrationTest {
     private ProcessNotificationUseCase processNotificationUseCase;
 
     @Autowired
-    private GetSubscriptionUseCase getSubscriptionUseCase;
+    private GetUserUseCase getUserUseCase;
 
     @Autowired
     private SubscriptionRepositoryPort subscriptionRepository;
@@ -83,13 +83,12 @@ class ProcessNotificationIntegrationTest {
     }
 
     @Test
-    void getSubscriptionById_shouldReturnDetailsWithUserNameAndStatus() {
-        var view = getSubscriptionUseCase.getById(SUBSCRIPTION_ID).orElseThrow();
-        assertThat(view.id()).isEqualTo(SUBSCRIPTION_ID);
-        assertThat(view.userName()).isEqualTo("Demo User");
-        assertThat(view.statusName()).isIn("ativa", "cancelada");
-        assertThat(view.userId()).isNotNull();
+    void getUserById_shouldReturnDetailsWithSubscriptionStatus() {
+        var view = getUserUseCase.getById(1L).orElseThrow();
+        assertThat(view.id()).isEqualTo(1L);
+        assertThat(view.fullName()).isEqualTo("Demo User");
+        assertThat(view.subscriptionStatus()).isIn("ativa", "cancelada");
+        assertThat(view.subscriptionId()).isNotNull();
         assertThat(view.createdAt()).isNotNull();
-        assertThat(view.updatedAt()).isNotNull();
     }
 }

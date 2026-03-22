@@ -12,7 +12,7 @@ O serviço segue **Ports and Adapters** (Clean Architecture):
 - **Application (Use Cases):** Casos de uso (`ReceiveNotificationUseCase`, `ProcessNotificationUseCase`) e serviços que orquestram a lógica.
 - **Ports (Interfaces):** `*RepositoryPort`, `MessagePublisherPort` — contratos do domínio.
 - **Adapters (Implementações):**
-  - **In:** REST (`NotificationController`, `SubscriptionController`, `UserController`), Kafka Consumer (`SubscriptionNotificationConsumer`).
+  - **In:** REST (`NotificationController`, `UserController`), Kafka Consumer (`SubscriptionNotificationConsumer`).
   - **Out:** PostgreSQL (JPA), Kafka Producer, Flyway.
 
 O domínio não depende de frameworks. As dependências apontam para dentro (regra de dependência).
