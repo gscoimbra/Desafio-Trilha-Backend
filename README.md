@@ -34,14 +34,26 @@ make sendNotifications
 
 O projeto usa **Ports and Adapters** (Hexagonal):
 
-| Camada    | Descrição                                                        |
-|-----------|------------------------------------------------------------------|
-| Domain    | `Subscription`, `Notification`, exceções, enums                  |
-| Application | Use cases e serviços (`ProcessNotificationService`, etc.)      |
-| Adapters In | REST (`NotificationController`, `UserController`), Kafka Consumer |
-| Adapters Out | PostgreSQL (JPA), Kafka Producer                               |
+- **Domain:** Entidades (`Subscription`, `Notification`), exceções e enums imutáveis
+- **Application:** Casos de uso (`ReceiveNotificationUseCase`, `ProcessNotificationUseCase`, `CreateUserUseCase`, `GetUserUseCase`) e serviços
+- **Ports:** `*RepositoryPort`, `MessagePublisherPort`, `CreateUserPort`, `UserQueryPort`
+- **Adapters In:** REST (`NotificationController`, `UserController`), Kafka Consumer (`SubscriptionNotificationConsumer`)
+- **Adapters Out:** PostgreSQL (JPA), Kafka Producer, Flyway
 
-Fluxo: **REST → Kafka → Consumer → Processamento → DB**
+O domínio não depende de frameworks. As dependências apontam para dentro.
+
+**Fluxo de notificações:**
+1. REST → Kafka: `POST /api/subscriptions/notifications` recebe userId e type, resolve subscriptionId do usuário e publica no tópico `subscription-notifications`
+2. Kafka → Processamento: Consumer consome a mensagem, converte para `Notification` e chama `ProcessNotificationService`
+3. Processamento: O serviço busca a assinatura, resolve o novo status (ativa/cancelada), atualiza e persiste no `event_history`
+
+Tudo é assíncrono após o retorno 202 Accepted.
+
+**Configurações:** Flyway em `db/migration/`; Kafka via `app.kafka.topics.subscription-notifications`; perfil `test` usa H2, sem Kafka, `data.sql` para seeds.
+
+**Convenções:** DTOs com `@Valid`; erros em `RestExceptionHandler`; exceções de domínio estendem `DomainException`.
+
+**Limitações:** Não há idempotência explícita; não há retry no consumer. Em produção, considerar autenticação (API Key, JWT, OAuth2) e SASL/SSL no Kafka.
 
 ---
 
@@ -129,12 +141,3 @@ O timestamp do evento é definido pelo servidor ao receber a requisição.
 - **Unitários:** `ProcessNotificationServiceTest`, `ReceiveNotificationServiceTest`
 - **Controller:** `NotificationControllerTest`, `UserControllerTest` (MockMvc)
 - **Integração:** `ProcessNotificationIntegrationTest`, `CreateUserIntegrationTest` (H2, fluxo completo)
-
----
-
-## Documentação Adicional
-
-| Arquivo      | Conteúdo                                                |
-|-------------|----------------------------------------------------------|
-| `COMMENTS.md` | Decisões arquiteturais, convenções e notas técnicas    |
-| `HISTORY.md`  | Histórico de versões e fases do desafio                |
