@@ -95,12 +95,12 @@ Consultar usuários com status da assinatura.
 
 ### `POST /api/subscriptions/notifications`
 
-Recebe notificações e enfileira para processamento assíncrono.
+Inscreve ou desinscreve um usuário (enfileira para processamento assíncrono).
 
 **Request:**
 ```json
 {
-  "subscriptionId": 1,
+  "userId": 1,
   "type": "SUBSCRIPTION_PURCHASED"
 }
 ```
@@ -115,7 +115,7 @@ O timestamp do evento é definido pelo servidor ao receber a requisição.
 **Respostas:**
 - `202 Accepted` – notificação aceita e enfileirada
 - `400 Bad Request` – payload inválido ou tipo desconhecido
-- `404 Not Found` – assinatura inexistente (no processamento assíncrono)
+- `404 Not Found` – usuário inexistente
 
 ---
 

@@ -21,7 +21,7 @@ O domínio não depende de frameworks. As dependências apontam para dentro (reg
 
 ## Fluxo de Notificações
 
-1. **REST → Kafka:** `POST /api/subscriptions/notifications` recebe o payload, valida e publica no tópico `subscription-notifications`.
+1. **REST → Kafka:** `POST /api/subscriptions/notifications` recebe userId e type, resolve subscriptionId do usuário e publica no tópico `subscription-notifications`.
 2. **Kafka → Processamento:** Consumer consome a mensagem, converte para `Notification` e chama `ProcessNotificationService`.
 3. **Processamento:** O serviço busca a assinatura, resolve o novo status (ativa/cancelada), atualiza e persiste no `event_history`.
 

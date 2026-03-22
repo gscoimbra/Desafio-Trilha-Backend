@@ -70,6 +70,10 @@ Changelog e evolução do Desafio Trilha Backend.
 - `HISTORY.md`: changelog por fase
 - `README.md`: documentação ampliada do projeto
 
+### fix: POST usa userId para inscrever/desinscrever
+- Payload alterado de subscriptionId para userId
+- Controller resolve subscriptionId a partir do usuário antes de enfileirar
+
 ### feat: GETs para listar usuários
 - `GET /api/users` e `GET /api/users/{id}` substituem os GETs de subscriptions
 - API centrada em usuários; resposta inclui subscriptionStatus

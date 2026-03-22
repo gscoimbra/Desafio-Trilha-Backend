@@ -10,7 +10,7 @@ import urllib.error
 import urllib.request
 
 BASE_URL = "http://localhost:8080/api/subscriptions/notifications"
-SUBSCRIPTION_ID = 1
+USER_ID = 1
 NOTIFICATION_TYPES = [
     "SUBSCRIPTION_PURCHASED",
     "SUBSCRIPTION_CANCELED",
@@ -19,7 +19,7 @@ NOTIFICATION_TYPES = [
 
 
 def send_notification(ntype: str) -> bool:
-    payload = {"subscriptionId": SUBSCRIPTION_ID, "type": ntype}
+    payload = {"userId": USER_ID, "type": ntype}
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         BASE_URL,
