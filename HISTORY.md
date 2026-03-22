@@ -70,6 +70,11 @@ Changelog e evolução do Desafio Trilha Backend.
 - `HISTORY.md`: changelog por fase
 - `README.md`: documentação ampliada do projeto
 
+### feat: endpoint de criação de usuário
+- `POST /api/users` – cria usuário com assinatura inicial cancelada
+- `CreateUserUseCase`, `CreateUserPort`, `UserView`, `UserController`
+- `UserJpaRepository`, `CreateUserAdapter`
+
 ### fix: remoção de SUBSCRIPTION_RESTARTED
 - Simplificado para dois estados: ativa (PURCHASED) e cancelada (CANCELED)
 - Removido SUBSCRIPTION_RESTARTED do enum e mapeamento

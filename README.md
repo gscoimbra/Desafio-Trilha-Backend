@@ -38,7 +38,7 @@ O projeto usa **Ports and Adapters** (Hexagonal):
 |-----------|------------------------------------------------------------------|
 | Domain    | `Subscription`, `Notification`, exceções, enums                  |
 | Application | Use cases e serviços (`ProcessNotificationService`, etc.)      |
-| Adapters In | REST (`NotificationController`, `SubscriptionController`), Kafka Consumer |
+| Adapters In | REST (`NotificationController`, `SubscriptionController`, `UserController`), Kafka Consumer |
 | Adapters Out | PostgreSQL (JPA), Kafka Producer                               |
 
 Fluxo: **REST → Kafka → Consumer → Processamento → DB**
@@ -46,6 +46,30 @@ Fluxo: **REST → Kafka → Consumer → Processamento → DB**
 ---
 
 ## API
+
+### `POST /api/users`
+
+Cria um usuário com assinatura inicial em status cancelada.
+
+**Request:**
+```json
+{
+  "fullName": "Maria Silva"
+}
+```
+
+**Resposta (201):**
+```json
+{
+  "id": 1,
+  "fullName": "Maria Silva",
+  "createdAt": "2025-02-16T12:00:00Z",
+  "subscriptionId": 1,
+  "subscriptionStatus": "cancelada"
+}
+```
+
+---
 
 ### `GET /api/subscriptions` e `GET /api/subscriptions/{id}`
 
@@ -104,8 +128,8 @@ O timestamp do evento é definido pelo servidor ao receber a requisição.
 ```
 
 - **Unitários:** `ProcessNotificationServiceTest`, `ReceiveNotificationServiceTest`
-- **Controller:** `NotificationControllerTest`, `SubscriptionControllerTest` (MockMvc)
-- **Integração:** `ProcessNotificationIntegrationTest` (H2, fluxo completo)
+- **Controller:** `NotificationControllerTest`, `SubscriptionControllerTest`, `UserControllerTest` (MockMvc)
+- **Integração:** `ProcessNotificationIntegrationTest`, `CreateUserIntegrationTest` (H2, fluxo completo)
 
 ---
 
