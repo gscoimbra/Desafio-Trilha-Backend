@@ -4,6 +4,8 @@ import com.streaming.subscriptions.adapter.in.rest.error.RestExceptionHandler;
 import com.streaming.subscriptions.application.port.in.CreateUserUseCase;
 import com.streaming.subscriptions.application.port.in.GetUserUseCase;
 import com.streaming.subscriptions.application.port.in.ReceiveNotificationUseCase;
+import com.streaming.subscriptions.domain.model.Notification;
+import com.streaming.subscriptions.domain.model.NotificationType;
 import com.streaming.subscriptions.domain.model.UserView;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.mockito.ArgumentCaptor;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -106,13 +110,16 @@ class UserControllerTest {
     }
 
     @Test
-    void subscribe_whenUserExists_shouldReturn202() throws Exception {
+    void subscribe_whenUserExists_shouldReturn202AndPublishSubscriptionPurchased() throws Exception {
         when(getUserUseCase.getById(1L)).thenReturn(Optional.of(DEMO_VIEW));
 
         mockMvc.perform(post("/api/users/1/subscribe"))
                 .andExpect(status().isAccepted());
 
-        verify(receiveNotificationUseCase).execute(any());
+        ArgumentCaptor<Notification> captor = ArgumentCaptor.forClass(Notification.class);
+        verify(receiveNotificationUseCase).execute(captor.capture());
+        assertThat(captor.getValue().getType()).isEqualTo(NotificationType.SUBSCRIPTION_PURCHASED);
+        assertThat(captor.getValue().getSubscriptionId()).isEqualTo(1L);
     }
 
     @Test
@@ -124,13 +131,16 @@ class UserControllerTest {
     }
 
     @Test
-    void unsubscribe_whenUserExists_shouldReturn202() throws Exception {
+    void unsubscribe_whenUserExists_shouldReturn202AndPublishSubscriptionCanceled() throws Exception {
         when(getUserUseCase.getById(1L)).thenReturn(Optional.of(DEMO_VIEW));
 
         mockMvc.perform(post("/api/users/1/unsubscribe"))
                 .andExpect(status().isAccepted());
 
-        verify(receiveNotificationUseCase).execute(any());
+        ArgumentCaptor<Notification> captor = ArgumentCaptor.forClass(Notification.class);
+        verify(receiveNotificationUseCase).execute(captor.capture());
+        assertThat(captor.getValue().getType()).isEqualTo(NotificationType.SUBSCRIPTION_CANCELED);
+        assertThat(captor.getValue().getSubscriptionId()).isEqualTo(1L);
     }
 
     @Test

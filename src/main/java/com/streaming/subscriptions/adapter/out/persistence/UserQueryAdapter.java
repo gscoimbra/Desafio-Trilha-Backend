@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class UserQueryAdapter implements UserQueryPort {
 
     @Override
     public List<UserView> findAll() {
-        return StreamSupport.stream(userJpaRepository.findAll().spliterator(), false)
+        return userJpaRepository.findAll().stream()
                 .map(this::toView)
                 .toList();
     }
