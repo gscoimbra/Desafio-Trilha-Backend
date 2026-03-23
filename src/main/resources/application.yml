@@ -38,3 +38,16 @@ spring:
 
 server:
   port: 8080
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+
+app:
+  kafka:
+    topics:
+      subscription-notifications: subscription-notifications
