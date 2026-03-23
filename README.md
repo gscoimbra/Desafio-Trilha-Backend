@@ -6,27 +6,31 @@ Serviço de notificações de assinaturas de streaming (Java 17, Spring Boot 3.2
 
 ## Quick Start
 
-**Pré-requisitos:** Java 17, Docker, Python 3, Git. Opcional: Make.
+**Pré-requisitos:** Java 17, Docker, Git.
 
 ```bash
 # 1. Subir PostgreSQL e Kafka
-make up
-# ou: docker compose up -d
+docker compose up -d
 
 # 2. Rodar a aplicação (em outro terminal)
-make run
-# ou: .\mvnw.cmd spring-boot:run   (Windows)
-
-# 3. Enviar notificações de teste (fluxo: PURCHASED -> CANCELED -> PURCHASED)
-make sendNotifications
-# ou: python scripts/send_notifications.py
-# ou (Windows): powershell -ExecutionPolicy Bypass -File scripts/send_notifications.ps1
+.\mvnw.cmd spring-boot:run   # Windows
+# ou: ./mvnw spring-boot:run   # Linux/Mac
 ```
 
 **Variável de ambiente:** `JAVA_HOME` deve apontar para o JDK 17.
 
 - **API:** http://localhost:8080
 - **Swagger UI:** http://localhost:8080/swagger-ui.html
+
+### Porta 8080 em uso
+
+Se aparecer `Port 8080 was already in use`, outro processo Java está usando a porta. Para encerrar:
+
+```powershell
+Get-Process -Name java | Stop-Process -Force
+```
+
+Depois, rode a aplicação novamente.
 
 ---
 
@@ -37,13 +41,13 @@ O projeto usa **Ports and Adapters** (Hexagonal):
 - **Domain:** Entidades (`Subscription`, `Notification`), exceções e enums imutáveis
 - **Application:** Casos de uso (`ReceiveNotificationUseCase`, `ProcessNotificationUseCase`, `CreateUserUseCase`, `GetUserUseCase`) e serviços
 - **Ports:** `*RepositoryPort`, `MessagePublisherPort`, `CreateUserPort`, `UserQueryPort`
-- **Adapters In:** REST (`NotificationController`, `UserController`), Kafka Consumer (`SubscriptionNotificationConsumer`)
+- **Adapters In:** REST (`UserController`), Kafka Consumer (`SubscriptionNotificationConsumer`)
 - **Adapters Out:** PostgreSQL (JPA), Kafka Producer, Flyway
 
 O domínio não depende de frameworks. As dependências apontam para dentro.
 
 **Fluxo de notificações:**
-1. REST → Kafka: `POST /api/subscriptions/notifications` recebe userId e type, resolve subscriptionId do usuário e publica no tópico `subscription-notifications`
+1. REST → Kafka: `POST /api/users/{id}/subscribe` ou `POST /api/users/{id}/unsubscribe` recebe o userId, resolve subscriptionId e publica no tópico `subscription-notifications`
 2. Kafka → Processamento: Consumer consome a mensagem, converte para `Notification` e chama `ProcessNotificationService`
 3. Processamento: O serviço busca a assinatura, resolve o novo status (ativa/cancelada), atualiza e persiste no `event_history`
 
@@ -105,29 +109,21 @@ Consultar usuários com status da assinatura.
 
 ---
 
-### `POST /api/subscriptions/notifications`
+### `POST /api/users/{id}/subscribe`
 
-Inscreve ou desinscreve um usuário (enfileira para processamento assíncrono).
+Ativa a assinatura do usuário (status `ativa`). Enfileira para processamento assíncrono.
 
-**Request:**
-```json
-{
-  "userId": 1,
-  "type": "SUBSCRIPTION_PURCHASED"
-}
-```
-O timestamp do evento é definido pelo servidor ao receber a requisição.
+- **202 Accepted** – requisição aceita
+- **404 Not Found** – usuário inexistente
 
-**Tipos:** `SUBSCRIPTION_PURCHASED`, `SUBSCRIPTION_CANCELED`
+---
 
-**Mapeamento:**
-- PURCHASED → status `ativa`
-- CANCELED → status `cancelada`
+### `POST /api/users/{id}/unsubscribe`
 
-**Respostas:**
-- `202 Accepted` – notificação aceita e enfileirada
-- `400 Bad Request` – payload inválido ou tipo desconhecido
-- `404 Not Found` – usuário inexistente
+Cancela a assinatura do usuário (status `cancelada`). Enfileira para processamento assíncrono.
+
+- **202 Accepted** – requisição aceita
+- **404 Not Found** – usuário inexistente
 
 ---
 
@@ -139,5 +135,5 @@ O timestamp do evento é definido pelo servidor ao receber a requisição.
 ```
 
 - **Unitários:** `ProcessNotificationServiceTest`, `ReceiveNotificationServiceTest`
-- **Controller:** `NotificationControllerTest`, `UserControllerTest` (MockMvc)
+- **Controller:** `UserControllerTest` (MockMvc)
 - **Integração:** `ProcessNotificationIntegrationTest`, `CreateUserIntegrationTest` (H2, fluxo completo)

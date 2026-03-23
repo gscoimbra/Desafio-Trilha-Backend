@@ -3,6 +3,7 @@ package com.streaming.subscriptions.adapter.in.rest;
 import com.streaming.subscriptions.adapter.in.rest.error.RestExceptionHandler;
 import com.streaming.subscriptions.application.port.in.CreateUserUseCase;
 import com.streaming.subscriptions.application.port.in.GetUserUseCase;
+import com.streaming.subscriptions.application.port.in.ReceiveNotificationUseCase;
 import com.streaming.subscriptions.domain.model.UserView;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,6 +37,9 @@ class UserControllerTest {
 
     @MockBean
     private GetUserUseCase getUserUseCase;
+
+    @MockBean
+    private ReceiveNotificationUseCase receiveNotificationUseCase;
 
     private static final UserView DEMO_VIEW = new UserView(
             1L, "Demo User", Instant.parse("2025-01-01T12:00:00Z"), 1L, "ativa"
@@ -97,5 +103,41 @@ class UserControllerTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].subscriptionStatus").value("ativa"));
+    }
+
+    @Test
+    void subscribe_whenUserExists_shouldReturn202() throws Exception {
+        when(getUserUseCase.getById(1L)).thenReturn(Optional.of(DEMO_VIEW));
+
+        mockMvc.perform(post("/api/users/1/subscribe"))
+                .andExpect(status().isAccepted());
+
+        verify(receiveNotificationUseCase).execute(any());
+    }
+
+    @Test
+    void subscribe_whenUserNotFound_shouldReturn404() throws Exception {
+        when(getUserUseCase.getById(999L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(post("/api/users/999/subscribe"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void unsubscribe_whenUserExists_shouldReturn202() throws Exception {
+        when(getUserUseCase.getById(1L)).thenReturn(Optional.of(DEMO_VIEW));
+
+        mockMvc.perform(post("/api/users/1/unsubscribe"))
+                .andExpect(status().isAccepted());
+
+        verify(receiveNotificationUseCase).execute(any());
+    }
+
+    @Test
+    void unsubscribe_whenUserNotFound_shouldReturn404() throws Exception {
+        when(getUserUseCase.getById(999L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(post("/api/users/999/unsubscribe"))
+                .andExpect(status().isNotFound());
     }
 }
