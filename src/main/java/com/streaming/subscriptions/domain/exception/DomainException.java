@@ -1,8 +1,8 @@
 package com.streaming.subscriptions.domain.exception;
 
 /**
- * Base for business-rule failures that map to HTTP responses in the REST adapter.
- * Status codes follow HTTP semantics (4xx client, 5xx server) without coupling the domain to Spring.
+ * Base para falhas de regra de negócio que são mapeadas para respostas HTTP no adapter REST.
+ * Os códigos seguem a semântica HTTP (4xx cliente, 5xx servidor) sem acoplar o domínio ao Spring.
  */
 public abstract class DomainException extends RuntimeException {
 

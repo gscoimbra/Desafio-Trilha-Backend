@@ -18,7 +18,7 @@ import lombok.Setter;
 import java.time.Instant;
 
 /**
- * Audit trail of notification events per subscription.
+ * Trilha de auditoria dos eventos de notificação por assinatura.
  */
 @Entity
 @Table(name = "event_history")

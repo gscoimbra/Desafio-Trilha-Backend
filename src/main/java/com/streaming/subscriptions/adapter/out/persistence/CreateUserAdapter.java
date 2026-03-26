@@ -31,12 +31,12 @@ public class CreateUserAdapter implements CreateUserPort {
                 .build();
         user = userJpaRepository.save(user);
 
-        StatusEntity cancelada = statusJpaRepository.findByStatusName("cancelada")
-                .orElseThrow(() -> new StatusNotConfiguredException("cancelada"));
+        StatusEntity canceled = statusJpaRepository.findByStatusName("canceled")
+                .orElseThrow(() -> new StatusNotConfiguredException("canceled"));
 
         SubscriptionEntity subscription = SubscriptionEntity.builder()
                 .user(user)
-                .status(cancelada)
+                .status(canceled)
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
@@ -47,7 +47,7 @@ public class CreateUserAdapter implements CreateUserPort {
                 user.getFullName(),
                 user.getCreatedAt(),
                 subscription.getId(),
-                cancelada.getStatusName()
+                canceled.getStatusName()
         );
     }
 }

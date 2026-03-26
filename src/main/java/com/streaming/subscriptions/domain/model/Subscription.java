@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /**
- * Subscription aggregate root (read/update via persistence port).
+ * Agregado raiz de assinatura (leitura/atualização via porta de persistência).
  */
 public final class Subscription {
 

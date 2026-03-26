@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Lookup of subscription states (e.g. ativa, cancelada).
+ * Tabela de referência (lookup) dos estados da assinatura (ex.: active, canceled).
  */
 @Entity
 @Table(name = "status")

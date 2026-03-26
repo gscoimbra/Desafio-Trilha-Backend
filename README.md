@@ -49,7 +49,7 @@ O domínio não depende de frameworks. As dependências apontam para dentro.
 **Fluxo de notificações:**
 1. REST → Kafka: `POST /api/users/{id}/subscribe` ou `POST /api/users/{id}/unsubscribe` recebe o userId, resolve subscriptionId e publica no tópico `subscription-notifications`
 2. Kafka → Processamento: Consumer consome a mensagem, converte para `Notification` e chama `ProcessNotificationService`
-3. Processamento: O serviço busca a assinatura, resolve o novo status (ativa/cancelada), atualiza e persiste no `event_history`
+3. Processamento: O serviço busca a assinatura, resolve o novo status (active/canceled), atualiza e persiste no `event_history`
 
 Tudo é assíncrono após o retorno 202 Accepted.
 
@@ -65,7 +65,7 @@ Tudo é assíncrono após o retorno 202 Accepted.
 
 ### `POST /api/users`
 
-Cria um usuário com assinatura inicial em status cancelada.
+Cria um usuário com assinatura inicial em status canceled.
 
 **Request:**
 ```json
@@ -81,7 +81,7 @@ Cria um usuário com assinatura inicial em status cancelada.
   "fullName": "Maria Silva",
   "createdAt": "2025-02-16T12:00:00Z",
   "subscriptionId": 1,
-  "subscriptionStatus": "cancelada"
+  "subscriptionStatus": "canceled"
 }
 ```
 
@@ -101,7 +101,7 @@ Consultar usuários com status da assinatura.
   "fullName": "Demo User",
   "createdAt": "2025-01-01T12:00:00Z",
   "subscriptionId": 1,
-  "subscriptionStatus": "ativa"
+  "subscriptionStatus": "active"
 }
 ```
 
@@ -111,7 +111,7 @@ Consultar usuários com status da assinatura.
 
 ### `POST /api/users/{id}/subscribe`
 
-Ativa a assinatura do usuário (status `ativa`). Enfileira para processamento assíncrono.
+Ativa a assinatura do usuário (status `active`). Enfileira para processamento assíncrono.
 
 - **202 Accepted** – requisição aceita
 - **404 Not Found** – usuário inexistente
@@ -120,7 +120,7 @@ Ativa a assinatura do usuário (status `ativa`). Enfileira para processamento as
 
 ### `POST /api/users/{id}/unsubscribe`
 
-Cancela a assinatura do usuário (status `cancelada`). Enfileira para processamento assíncrono.
+Cancela a assinatura do usuário (status `canceled`). Enfileira para processamento assíncrono.
 
 - **202 Accepted** – requisição aceita
 - **404 Not Found** – usuário inexistente

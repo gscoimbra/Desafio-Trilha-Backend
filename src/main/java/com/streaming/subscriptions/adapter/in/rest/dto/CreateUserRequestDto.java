@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Request to create a user with initial subscription (cancelada)")
+@Schema(description = "Request para criar um usuário com assinatura inicial (canceled)")
 public class CreateUserRequestDto {
 
-    @NotBlank(message = "fullName is required")
+    @NotBlank(message = "fullName é obrigatório")
     @Size(max = 255)
-    @Schema(description = "User full name", example = "Maria Silva", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Nome completo do usuário", example = "Gabriel Coimbra", requiredMode = Schema.RequiredMode.REQUIRED)
     private String fullName;
 }

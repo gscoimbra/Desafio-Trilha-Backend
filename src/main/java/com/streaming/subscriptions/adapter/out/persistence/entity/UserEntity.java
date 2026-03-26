@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Customer (ERD: {@code user}). Table {@code users} avoids SQL reserved word {@code user}.
+ * Cliente (ERD: {@code user}). A tabela {@code users} evita a palavra reservada SQL {@code user}.
  */
 @Entity
 @Table(name = "users")

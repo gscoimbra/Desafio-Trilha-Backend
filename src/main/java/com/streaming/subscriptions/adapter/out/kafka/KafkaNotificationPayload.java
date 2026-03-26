@@ -8,7 +8,7 @@ import com.streaming.subscriptions.domain.model.NotificationType;
 import java.time.Instant;
 
 /**
- * JSON shape produced by {@link KafkaMessagePublisherAdapter} and consumed from Kafka.
+ * Formato JSON produzido por {@link KafkaMessagePublisherAdapter} e consumido do Kafka.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record KafkaNotificationPayload(Long subscriptionId, String type, String occurredAt) {

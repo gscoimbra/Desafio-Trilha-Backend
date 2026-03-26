@@ -41,8 +41,8 @@ public class ProcessNotificationService implements ProcessNotificationUseCase {
 
     private static String resolveTargetStatusName(NotificationType type) {
         return switch (type) {
-            case SUBSCRIPTION_PURCHASED -> "ativa";
-            case SUBSCRIPTION_CANCELED -> "cancelada";
+            case SUBSCRIPTION_PURCHASED -> "active";
+            case SUBSCRIPTION_CANCELED -> "canceled";
         };
     }
 }

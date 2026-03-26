@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
 /**
- * Maps domain and validation errors to HTTP responses with a consistent {@link ApiError} body.
+ * Mapeia erros de domínio e validação para respostas HTTP com um corpo {@link ApiError} consistente.
  */
 @RestControllerAdvice
 @Slf4j

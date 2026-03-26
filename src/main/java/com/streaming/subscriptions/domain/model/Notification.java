@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /**
- * Domain representation of a subscription notification (inbound from API / Kafka).
+ * Representação de domínio de uma notificação de assinatura (entrada via API / Kafka).
  */
 public final class Notification {
 
