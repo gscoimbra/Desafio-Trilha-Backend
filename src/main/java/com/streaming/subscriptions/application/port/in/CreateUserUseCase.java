@@ -12,5 +12,4 @@ public interface CreateUserUseCase {
 
 /**
  * Define o que o sistema oferece: "criar usuário recebenfo full name e devolvendo UserView".
- * Quem implementa é o service (não o Port OUT)
  */

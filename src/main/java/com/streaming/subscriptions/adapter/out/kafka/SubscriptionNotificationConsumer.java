@@ -26,8 +26,8 @@ public class SubscriptionNotificationConsumer {
     )
     public void consume(String payload) {
         try {
-            KafkaNotificationPayload parsed = objectMapper.readValue(payload, KafkaNotificationPayload.class);
-            processNotificationUseCase.execute(parsed.toDomain());
+            KafkaNotificationPayload parsed = objectMapper.readValue(payload, KafkaNotificationPayload.class); // Aqui o objectMapper desserializa a String(JSON bruto) que o Kafak entrega.
+            processNotificationUseCase.execute(parsed.toDomain()); // parsed.toDomain() -> converte o DTO de "transporte"(enviado pelo Kafka) para o modelo de domínio(Notification(Com NotificationType, Instant...))
         } catch (SubscriptionNotFoundException error) {
             log.warn("Skipping message: {}", error.getMessage());
         } catch (DomainException error) {
