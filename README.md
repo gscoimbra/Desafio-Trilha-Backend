@@ -53,7 +53,7 @@ O domínio não depende de frameworks. As dependências apontam para dentro.
 
 Tudo é assíncrono após o retorno 202 Accepted.
 
-**Configurações:** Flyway em `db/migration/`; Kafka via `app.kafka.topics.subscription-notifications`; perfil `test` usa H2, sem Kafka, `data.sql` para seeds.
+**Configurações:** Flyway em `db/migration/`; Kafka via `app.kafka.topics.subscription-notifications`; `data.sql` para seeds.
 
 **Convenções:** DTOs com `@Valid`; erros em `RestExceptionHandler`; exceções de domínio estendem `DomainException`.
 
@@ -126,14 +126,3 @@ Cancela a assinatura do usuário (status `canceled`). Enfileira para processamen
 - **404 Not Found** – usuário inexistente
 
 ---
-
-## Testes
-
-```bash
-./mvnw test
-# ou: .\mvnw.cmd test   (Windows)
-```
-
-- **Unitários:** `ProcessNotificationServiceTest`, `ReceiveNotificationServiceTest`
-- **Controller:** `UserControllerTest` (MockMvc)
-- **Integração:** `ProcessNotificationIntegrationTest`, `CreateUserIntegrationTest` (H2, fluxo completo)
