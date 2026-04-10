@@ -77,7 +77,7 @@ public class UserController {
 
     @Operation(
             summary = "Activate subscription",
-            description = "Activates the user's subscription (ativa). Enqueues for asynchronous processing."
+            description = "Activates the user's subscription. Enqueues for asynchronous processing."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "202", description = "Request accepted and queued"),
@@ -96,7 +96,7 @@ public class UserController {
 
     @Operation(
             summary = "Cancel subscription",
-            description = "Cancels the user's subscription (cancelada). Enqueues for asynchronous processing."
+            description = "Cancels the user's subscription. Enqueues for asynchronous processing."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "202", description = "Request accepted and queued"),

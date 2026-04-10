@@ -19,7 +19,7 @@ public class UserQueryAdapter implements UserQueryPort {
     @Override
     public Optional<UserView> findById(Long id) {
         return userJpaRepository.findById(id)
-                .map(this::toView);
+                .map(this::toView); // "method reference", pegue cada UserEntity e chame o método toView nele"
     }
 
     @Override
@@ -29,16 +29,16 @@ public class UserQueryAdapter implements UserQueryPort {
                 .toList();
     }
 
-    private UserView toView(UserEntity entity) {
-        var sub = entity.getSubscriptions().stream().findFirst();
-        Long subId = sub.map(s -> s.getId()).orElse(null);
-        String subStatus = sub.map(s -> s.getStatus().getStatusName()).orElse(null);
+    private UserView toView(UserEntity user) {
+        var subscription = user.getSubscriptions().stream().findFirst();
+        Long subscriptionId = subscription.map(sub -> sub.getId()).orElse(null);
+        String subscriptionStatus = subscription.map(sub -> sub.getStatus().getStatusName()).orElse(null);
         return new UserView(
-                entity.getId(),
-                entity.getFullName(),
-                entity.getCreatedAt(),
-                subId,
-                subStatus
+                user.getId(),
+                user.getFullName(),
+                user.getCreatedAt(),
+                subscriptionId, // ID da subscription do usuário(tabela subscriptions.id), não é o id do status(status.id)
+                subscriptionStatus
         );
     }
 }

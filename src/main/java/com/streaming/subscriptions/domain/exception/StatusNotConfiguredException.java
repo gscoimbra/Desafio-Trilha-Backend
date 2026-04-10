@@ -1,7 +1,7 @@
 package com.streaming.subscriptions.domain.exception;
 
 /**
- * Required status row missing in the database (configuration / migration issue).
+ * Linha de status obrigatória ausente no banco de dados (problema de configuração / migração).
  */
 public class StatusNotConfiguredException extends DomainException {
 

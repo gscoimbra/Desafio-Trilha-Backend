@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Use case for querying users with subscription info.
+ * Caso de uso para consultar usuários com informações de assinatura.
  */
 public interface GetUserUseCase {
 
-    Optional<UserView> getById(Long id);
+    Optional<UserView> getById(Long id); // Optional porque pode não existir um usuário com aquele Id. Serve para representar claramente "pode não existir" sem usar null.
 
-    List<UserView> listAll();
+    List<UserView> listAll(); // Caso não haja usuários, retorna uma lista vazia.
 }

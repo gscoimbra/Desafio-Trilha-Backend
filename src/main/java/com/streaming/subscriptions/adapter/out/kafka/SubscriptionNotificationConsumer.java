@@ -19,6 +19,7 @@ public class SubscriptionNotificationConsumer {
     private final ObjectMapper objectMapper;
     private final ProcessNotificationUseCase processNotificationUseCase;
 
+    // Escuta o Kafka
     @KafkaListener(
             topics = "${app.kafka.topics.subscription-notifications}",
             groupId = "${spring.kafka.consumer.group-id}"
@@ -27,17 +28,17 @@ public class SubscriptionNotificationConsumer {
         try {
             KafkaNotificationPayload parsed = objectMapper.readValue(payload, KafkaNotificationPayload.class);
             processNotificationUseCase.execute(parsed.toDomain());
-        } catch (SubscriptionNotFoundException e) {
-            log.warn("Skipping message: {}", e.getMessage());
-        } catch (DomainException e) {
-            if (e.isServerError()) {
-                log.error("Server-side error while processing Kafka message: {}", e.getMessage(), e);
-                throw new RuntimeException("Kafka message processing failed", e);
+        } catch (SubscriptionNotFoundException error) {
+            log.warn("Skipping message: {}", error.getMessage());
+        } catch (DomainException error) {
+            if (error.isServerError()) {
+                log.error("Server-side error while processing Kafka message: {}", error.getMessage(), error);
+                throw new RuntimeException("Kafka message processing failed", error);
             }
-            log.warn("Invalid notification message: {}", e.getMessage());
-        } catch (Exception e) {
-            log.error("Failed to process subscription notification from Kafka", e);
-            throw new RuntimeException("Kafka message processing failed", e);
+            log.warn("Invalid notification message: {}", error.getMessage());
+        } catch (Exception error) {
+            log.error("Failed to process subscription notification from Kafka", error);
+            throw new RuntimeException("Kafka message processing failed", error);
         }
     }
 }

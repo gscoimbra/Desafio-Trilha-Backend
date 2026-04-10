@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Read-only port for querying users with subscription info.
+ * Porta somente-leitura para consultar usuários com informações de assinatura.
  */
 public interface UserQueryPort {
 

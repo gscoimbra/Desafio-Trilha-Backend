@@ -17,3 +17,8 @@ public class ReceiveNotificationService implements ReceiveNotificationUseCase {
         messagePublisherPort.publish(notification);
     }
 }
+
+/**
+ * A lógica aqui é delegar para a porta de mensageria, note que o service não conhece o Kafka,
+ * quem conhece é só MessagePubliserPort
+ */

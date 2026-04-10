@@ -4,13 +4,27 @@ import java.time.Instant;
 import java.util.Objects;
 
 /**
- * Agregado raiz de assinatura (leitura/atualização via porta de persistência).
+ * Representa o estado atual de uma assinatura.
+ * Do ponto de vista do domínio, é a "unidade" que a aplicação carrega, altera e persiste.
+ *
+ * Como "muda de estado":
+ * A alteração é feita via {@link #withStatus(Long, Instant)}.
+ * Chega uma Notification → carrega Subscription → resolve o novo status → gera uma nova Subscription → persiste.
+ * Ou seja, não se faz setStatusId; cria-se uma nova versão da assinatura com statusId e updatedAt atualizados.
+ *
+ * Subscription é o "estado atual", enquanto que Notification é o "evento que causa a mudança".
  */
 public final class Subscription {
 
     private final Long id;
+
+    // Dono da assinatura
     private final Long userId;
+    
+    // FK para a tabela status(numérico) - interessante porque no futuro se quiser renomear o texto do status_name(active/canceled) sem mexer nas assinaturas
     private final Long statusId;
+
+    // Timestamps do registro
     private final Instant createdAt;
     private final Instant updatedAt;
 

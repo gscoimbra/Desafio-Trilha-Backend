@@ -24,7 +24,7 @@ public class CreateUserAdapter implements CreateUserPort {
 
     @Override
     public UserView createUserWithSubscription(String fullName) {
-        Instant now = Instant.now();
+        Instant now = Instant.now(); // Captura o "agora" em UTC
         UserEntity user = UserEntity.builder()
                 .fullName(fullName)
                 .createdAt(now)

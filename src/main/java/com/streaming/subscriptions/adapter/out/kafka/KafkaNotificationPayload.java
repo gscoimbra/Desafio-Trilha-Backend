@@ -26,8 +26,8 @@ public record KafkaNotificationPayload(Long subscriptionId, String type, String 
                     ? Instant.parse(occurredAt)
                     : Instant.now();
             return new Notification(subscriptionId, notificationType, at);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidNotificationPayloadException("Invalid notification type in payload: " + type, e);
+        } catch (IllegalArgumentException error) {
+            throw new InvalidNotificationPayloadException("Invalid notification type in payload: " + type, error);
         }
     }
 }

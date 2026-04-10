@@ -18,10 +18,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KafkaMessagePublisherAdapter implements MessagePublisherPort {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final ObjectMapper objectMapper;
+    private final KafkaTemplate<String, String> kafkaTemplate; // API do Spring Kafka para enviar mensagens.
+    private final ObjectMapper objectMapper; // Jackson: Converte objetos Java em JSON.
 
-    @Value("${app.kafka.topics.subscription-notifications}")
+    @Value("${app.kafka.topics.subscription-notifications}") // Lê do application.yml o nome do tópico e guarda em topic.
     private String topic;
 
     @Override
@@ -29,8 +29,8 @@ public class KafkaMessagePublisherAdapter implements MessagePublisherPort {
         try {
             String payload = objectMapper.writeValueAsString(toMap(notification));
             kafkaTemplate.send(topic, String.valueOf(notification.getSubscriptionId()), payload);
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Failed to serialize notification for Kafka", e);
+        } catch (JsonProcessingException error) {
+            throw new IllegalStateException("Failed to serialize notification for Kafka", error);
         }
     }
 
@@ -42,3 +42,8 @@ public class KafkaMessagePublisherAdapter implements MessagePublisherPort {
         return map;
     }
 }
+
+/**
+ * Esse adapter pega a Notificação, transforma em JSON no formato combinado
+ * e manda para o tópico Kafka configurado.
+ */

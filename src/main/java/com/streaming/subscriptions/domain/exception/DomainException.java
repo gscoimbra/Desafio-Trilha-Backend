@@ -8,6 +8,10 @@ public abstract class DomainException extends RuntimeException {
 
     private final int httpStatusCode;
 
+    /**
+     * Exceção "simples"
+     * Exemplo: UserNotFoundException não precisa "encadear" outra exceção, ela só informa o erro.
+     */
     protected DomainException(int httpStatusCode, String message) {
         super(message);
         if (httpStatusCode < 100 || httpStatusCode > 599) {
@@ -16,6 +20,10 @@ public abstract class DomainException extends RuntimeException {
         this.httpStatusCode = httpStatusCode;
     }
 
+    /**
+     * Exceção "encadeada"
+     * Quando a falha de regra aconteceu por causa de outra exceção e quero preservar a causa para debug.
+     */
     protected DomainException(int httpStatusCode, String message, Throwable cause) {
         super(message, cause);
         if (httpStatusCode < 100 || httpStatusCode > 599) {

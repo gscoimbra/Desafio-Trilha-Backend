@@ -1,6 +1,6 @@
 # Desafio Trilha Backend
 
-Serviço de notificações de assinaturas de streaming (Java 17, Spring Boot 3.2, Kafka, PostgreSQL), com arquitetura hexagonal.
+Serviço de notificações de assinaturas de streaming (Java 17, Spring Boot 3.2, Kafka 7.5, PostgreSQL 16), com arquitetura hexagonal.
 
 ---
 
@@ -57,7 +57,7 @@ Tudo é assíncrono após o retorno 202 Accepted.
 
 **Convenções:** DTOs com `@Valid`; erros em `RestExceptionHandler`; exceções de domínio estendem `DomainException`.
 
-**Limitações:** Não há idempotência explícita; não há retry no consumer. Em produção, considerar autenticação (API Key, JWT, OAuth2) e SASL/SSL no Kafka.
+**Limitações:** Não há retry no consumer. Não há autenticação (API Key, JWT, OAuth2) e SASL/SSL no Kafka. Não há testes unitários e testes de integração.
 
 ---
 

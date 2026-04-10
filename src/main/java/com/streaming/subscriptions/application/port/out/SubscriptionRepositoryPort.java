@@ -5,7 +5,7 @@ import com.streaming.subscriptions.domain.model.Subscription;
 import java.util.Optional;
 
 /**
- * Persistence for subscriptions (current state).
+ * Persistência de assinaturas (estado atual).
  */
 public interface SubscriptionRepositoryPort {
 

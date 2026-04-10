@@ -1,7 +1,7 @@
 package com.streaming.subscriptions.domain.exception;
 
 /**
- * Malformed or invalid notification content (e.g. Kafka message deserialization / validation).
+ * Conteúdo de notificação malformado ou inválido.
  */
 public class InvalidNotificationPayloadException extends DomainException {
 

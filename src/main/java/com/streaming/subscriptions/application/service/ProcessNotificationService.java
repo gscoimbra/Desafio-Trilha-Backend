@@ -19,24 +19,24 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class ProcessNotificationService implements ProcessNotificationUseCase {
 
-    private final SubscriptionRepositoryPort subscriptionRepository;
-    private final StatusRepositoryPort statusRepository;
-    private final EventHistoryRepositoryPort eventHistoryRepository;
+    private final SubscriptionRepositoryPort subscriptionRepositoryPort;
+    private final StatusRepositoryPort statusRepositoryPort;
+    private final EventHistoryRepositoryPort eventHistoryRepositoryPort;
 
     @Override
     @Transactional
     public void execute(Notification notification) {
-        Subscription subscription = subscriptionRepository
+        Subscription subscription = subscriptionRepositoryPort
                 .findById(notification.getSubscriptionId())
                 .orElseThrow(() -> new SubscriptionNotFoundException(notification.getSubscriptionId()));
 
         String targetStatusName = resolveTargetStatusName(notification.getType());
-        Long statusId = statusRepository.findIdByStatusName(targetStatusName)
+        Long statusId = statusRepositoryPort.findIdByStatusName(targetStatusName)
                 .orElseThrow(() -> new StatusNotConfiguredException(targetStatusName));
 
         Subscription updated = subscription.withStatus(statusId, Instant.now());
-        subscriptionRepository.save(updated);
-        eventHistoryRepository.append(notification);
+        subscriptionRepositoryPort.save(updated);
+        eventHistoryRepositoryPort.append(notification);
     }
 
     private static String resolveTargetStatusName(NotificationType type) {
